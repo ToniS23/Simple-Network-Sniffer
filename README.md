@@ -6,5 +6,5 @@ A simple weekend project in Python to learn sockets, network programming and sca
 Main functionalities:
 - sniff network traffic
 - filter packets
-
+- craft packets
 
