@@ -15,25 +15,56 @@ main.resizable(False, False)
 output_text = scrolledtext.ScrolledText(main, width=80, height=30, wrap=tk.WORD) # main widget
 output_text.pack(padx=10, pady=10)
 
+captured_packets = None
+
 def capture_packets():
+    global captured_packets
     old_stdout = sys.stdout
     sys.stdout = captured_output = io.StringIO()
+
     try:
-        packets = sniff(count=10) # this will block the event loop because it doesn't return control only after it captures packets
-        packets.show() # this is NOT returned as a string so it can't be output to the widget
+        # starting message
+        output_text.insert(tk.END, "[+]-Capturing packets, please wait....\n")
+
+        # capture the packets
+        captured_packets = sniff(count=10) # this will block the event loop because it doesn't return control only after it captures packets
+        captured_packets.show() # this is NOT returned as a string but as stdoutput so it can't be output to the widget
+
+        # show captured packets in widget
         output_text.insert(tk.END, captured_output.getvalue()) # send the value of the StringIO object to the widget
         output_text.see(tk.END)
+
+    except BaseException:
+        print("Unexpected Error") # for handling anything that could go wrong
+
     finally:
         sys.stdout = old_stdout # restore old stdoutput
+
+# function for details of packages
+def show_details():
+    if captured_packets:
+        output_text.insert(tk.END, "[+]-Loading details, please wait....\n")
+        for i,packet in enumerate(captured_packets):
+            output_text.insert(tk.END, f"Packet.... {i}: {packet.summary()}\n")
+            output_text.insert(tk.END, f"Details.... \n {packet.show(dump=True)}\n\n")
+            output_text.see(tk.END)
+    else:
+        output_text.insert(tk.END, "[+]-No packets captured yet.... \n")
 
 # we need this function to not block the main thread on which our UI runs (event loop)
 def start_capture():
     output_text.insert(tk.END, "[+]-Capturing packets, please wait....\n")
     capture_thread = threading.Thread(target=capture_packets)
     capture_thread.start() # start the separate thread for capturing packets
-    
+
+# separate thread for details
+def details_thread():
+    details_thread = threading.Thread(target=show_details)   
+    details_thread.start() # start the separate thread for capturing packets
 
 update_button = tk.Button(main, text='Capture 10 packets :)', command=start_capture)
-update_button.pack(pady=20)
+update_button.pack(pady=10)
+show_packets_details_button = tk.Button(main, text='Show Details', command=details_thread)
+show_packets_details_button.pack(padx=10)
 
 main.mainloop()
