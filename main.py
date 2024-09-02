@@ -9,12 +9,21 @@ main = tk.Tk()
 
 main.title("Simple Packet Sniffer")
 
-main.geometry("800x700")
+main.geometry("900x700")
 main.resizable(False, False)
 
 main.iconbitmap("./sniffing-dog.ico")
 
-output_text = scrolledtext.ScrolledText(main, width=80, height=30, wrap=tk.WORD) # main widget
+title_frame = tk.Frame(main)
+title_frame.pack(padx=10, pady=10)
+
+image = tk.PhotoImage(file="./sniffing-dog.png")
+image_label = tk.Label(title_frame, image=image, width=60, height=60)
+image_label.pack(side=tk.LEFT, padx=10)
+title_label = tk.Label(title_frame, text="Simple Packet Sniffer", font=("Helvetica", 16, "bold"))
+title_label.pack(side=tk.LEFT, padx=10)
+
+output_text = scrolledtext.ScrolledText(main, width=100, height=30, wrap=tk.WORD) # main widget
 output_text.pack(padx=10, pady=10)
 
 captured_packets = None
@@ -64,9 +73,12 @@ def details_thread():
     details_thread = threading.Thread(target=show_details)   
     details_thread.start() # start the separate thread for capturing packets
 
-update_button = tk.Button(main, text='Capture 10 packets :)', command=start_capture)
-update_button.pack(pady=10)
-show_packets_details_button = tk.Button(main, text='Show Details', command=details_thread)
-show_packets_details_button.pack(padx=10)
+button_frame = tk.Frame(main)
+button_frame.pack(padx=10, pady=10)
+
+update_button = tk.Button(button_frame, text='Capture 10 packets :)', command=start_capture)
+update_button.pack(side=tk.LEFT, padx=10 ,pady=10)
+show_packets_details_button = tk.Button(button_frame, text='Show Details', command=details_thread)
+show_packets_details_button.pack(side=tk.LEFT, padx=10 ,pady=10)
 
 main.mainloop()
