@@ -4,6 +4,8 @@ from scapy.all import *
 import tkinter as tk
 from tkinter import scrolledtext
 import threading
+from tkinter import ttk
+import dns_info_requests
 
 main = tk.Tk()
 
@@ -12,18 +14,30 @@ main.title("Simple Packet Sniffer")
 main.geometry("900x700")
 main.resizable(False, False)
 
+# create tabs
+notebook = ttk.Notebook(main)
+notebook.pack(expand=True, fill='both')
+tab1 = ttk.Frame(notebook)
+tab2 = ttk.Frame(notebook)
+notebook.add(tab1, text='Packet Capture')
+notebook.add(tab2, text='DNS info')
+
+# insert icon
 main.iconbitmap("./sniffing-dog.ico")
 
-title_frame = tk.Frame(main)
+# frame for the title
+title_frame = tk.Frame(tab1)
 title_frame.pack(padx=10, pady=10)
 
+# title management (logo+title)
 image = tk.PhotoImage(file="./sniffing-dog.png")
 image_label = tk.Label(title_frame, image=image, width=60, height=60)
 image_label.pack(side=tk.LEFT, padx=10)
-title_label = tk.Label(title_frame, text="Simple Packet Sniffer", font=("Helvetica", 16, "bold"))
+title_label = tk.Label(title_frame, text="Simple Packet Sniffer", font=("Arial", 20, "bold"))
 title_label.pack(side=tk.LEFT, padx=10)
 
-output_text = scrolledtext.ScrolledText(main, width=100, height=30, wrap=tk.WORD) # main widget
+# main widget management
+output_text = scrolledtext.ScrolledText(tab1, width=100, height=30, wrap=tk.WORD) # main widget
 output_text.pack(padx=10, pady=10)
 
 captured_packets = None
@@ -73,7 +87,7 @@ def details_thread():
     details_thread = threading.Thread(target=show_details)   
     details_thread.start() # start the separate thread for capturing packets
 
-button_frame = tk.Frame(main)
+button_frame = tk.Frame(tab1)
 button_frame.pack(padx=10, pady=10)
 
 update_button = tk.Button(button_frame, text='Capture 10 packets :)', command=start_capture)
