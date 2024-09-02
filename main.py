@@ -12,6 +12,8 @@ main.title("Simple Packet Sniffer")
 main.geometry("800x700")
 main.resizable(False, False)
 
+main.iconbitmap("./sniffing-dog.ico")
+
 output_text = scrolledtext.ScrolledText(main, width=80, height=30, wrap=tk.WORD) # main widget
 output_text.pack(padx=10, pady=10)
 
