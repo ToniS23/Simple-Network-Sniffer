@@ -6,7 +6,6 @@ Description: A simple weekend project in Python to learn network programming, re
 ---
 Main functionalities:
 - network traffic sniffing
-- dns information requests for a given ip
-- packet crafting
+- DNS information requests for a given ip
 - UI implementation
 ---
