@@ -95,22 +95,28 @@ update_button.pack(side=tk.LEFT, padx=10 ,pady=10)
 show_packets_details_button = tk.Button(button_frame, text='Show Details', command=details_thread)
 show_packets_details_button.pack(side=tk.LEFT, padx=10 ,pady=10)
 
-# Function that processes the input and returns some output
+# function that processes the input and returns some output
 def process_input():
-    user_input = input_box.get()  # Get the text from the input box
-    result = f"{dns_info_requests.get_dns_info(str(user_input))}"
-    output_box.config(state=tk.NORMAL)  # Enable the output box to update the text
-    output_box.delete(1.0, tk.END)  # Clear the output box
-    output_box.insert(tk.END, result)  # Insert the result into the output box
-    output_box.config(state=tk.DISABLED)  # Disable the output box again
+    user_input = input_box.get()  # get the text from the input box
+    result = dns_info_requests.get_dns_info(str(user_input)) # get the DNS info as a string
+    output_box.config(state=tk.NORMAL)  # enable the output box to update the text
+    output_box.delete(1.0, tk.END)  # clear the output box
+    output_box.insert(tk.END, result)  # insert the result into the output box
+    output_box.config(state=tk.DISABLED)  # disable the output box again
 
-input_box = tk.Entry(tab2, width=50)
-input_box.pack(pady=20)
-
-process_button = tk.Button(tab2, text="GET", command=process_input)
-process_button.pack(pady=10)
-
-output_box = tk.Text(tab2, width=50, height=10, state=tk.DISABLED)
+output_box = tk.Text(tab2, width=50, height=30, state=tk.DISABLED)
 output_box.pack(pady=20)
+
+dns_label = tk.Label(tab2, text="Input IP Address (leave blank for your own IP)", font=("Arial", 10, "bold"))
+dns_label.pack(padx=0, pady=0)
+
+dns_info_frame = tk.Frame(tab2)
+dns_info_frame.pack(padx=10, pady=10)
+
+input_box = tk.Entry(dns_info_frame, width=30)
+input_box.pack(side=tk.LEFT, padx=10 ,pady=10)
+
+process_button = tk.Button(dns_info_frame, text="GET", command=process_input, width=10)
+process_button.pack(side=tk.LEFT, padx=10 ,pady=10)
 
 main.mainloop()

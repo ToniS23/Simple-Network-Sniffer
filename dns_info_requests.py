@@ -9,15 +9,18 @@ def get_dns_info(ip_address):
     if response.status_code == 200:
         data = response.json()
     else:
-        print(f"Error: Unable to fetch data for {ip_address}")
+        print(f"Error: Unable to fetch data for {ip_address}\n")
         return None
+
+    output = "" # string for holding the result
 
     # enumerate the json file (dictionary) stored in data
     if data:
         for key,value in data.items():
             try:
-                print(f"{str(key)}: {str(value)}")
+                output += f"{str(key)}: {str(value)}\n"
             except BaseException:
-                print("Unexpected Error")
+                print("Unexpected Error\n")
+        return output
     else:
-        print("Failed to retrieve information.")
+        print("Failed to retrieve information.\n")
