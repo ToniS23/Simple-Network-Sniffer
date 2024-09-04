@@ -9,7 +9,7 @@ import dns_info_requests
 
 main = tk.Tk()
 
-main.title("Simple Packet Sniffer")
+main.title("Simple Network Sniffer")
 
 main.geometry("900x700")
 main.resizable(False, False)
@@ -33,7 +33,7 @@ title_frame.pack(padx=10, pady=10)
 image = tk.PhotoImage(file="./sniffing-dog.png")
 image_label = tk.Label(title_frame, image=image, width=60, height=60)
 image_label.pack(side=tk.LEFT, padx=10)
-title_label = tk.Label(title_frame, text="Simple Packet Sniffer", font=("Arial", 20, "bold"))
+title_label = tk.Label(title_frame, text="Simple Network Sniffer", font=("Arial", 20, "bold"))
 title_label.pack(side=tk.LEFT, padx=10)
 
 # main widget management
@@ -94,5 +94,23 @@ update_button = tk.Button(button_frame, text='Capture 10 packets :)', command=st
 update_button.pack(side=tk.LEFT, padx=10 ,pady=10)
 show_packets_details_button = tk.Button(button_frame, text='Show Details', command=details_thread)
 show_packets_details_button.pack(side=tk.LEFT, padx=10 ,pady=10)
+
+# Function that processes the input and returns some output
+def process_input():
+    user_input = input_box.get()  # Get the text from the input box
+    result = f"{dns_info_requests.get_dns_info(str(user_input))}"
+    output_box.config(state=tk.NORMAL)  # Enable the output box to update the text
+    output_box.delete(1.0, tk.END)  # Clear the output box
+    output_box.insert(tk.END, result)  # Insert the result into the output box
+    output_box.config(state=tk.DISABLED)  # Disable the output box again
+
+input_box = tk.Entry(tab2, width=50)
+input_box.pack(pady=20)
+
+process_button = tk.Button(tab2, text="GET", command=process_input)
+process_button.pack(pady=10)
+
+output_box = tk.Text(tab2, width=50, height=10, state=tk.DISABLED)
+output_box.pack(pady=20)
 
 main.mainloop()
